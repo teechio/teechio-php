@@ -32,7 +32,7 @@ class TeechioModel {
 		$response = Unirest::post(self::$config['host'].self::$endpoint, array( "Content-Type" => "application/json"), json_encode($arrayParam));
 		$response->code; // HTTP Status code
 		$response->headers; // Headers
-		var_dump($this->fields = $response->body);
+		$this->fields = $response->body;
         return true;
 	}
 
