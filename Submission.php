@@ -10,7 +10,7 @@ class Submission extends TeechioModel{
 		parent::__construct('submissions');
 	}
 
-	public function grading($idSubmission, $score) {
+	public function grade($idSubmission, $score) {
 		$this->put($idSubmission, $score, array('path' => $idSubmission . '/score'));
 	}
 
