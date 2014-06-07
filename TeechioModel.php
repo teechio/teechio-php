@@ -18,46 +18,42 @@ class TeechioModel {
 		return $this->fields->{$key};
 	}
 
-	public function retrieve($id, $options = NULL) {
+	public function fetch($id, $options = NULL) {
 		$path = TeechioModel::buildPath('get', $options);
-		$response = Unirest::get(self::$config['host'].$this->path);
-		$response->code; // HTTP Status code
-		$response->headers; // Headers
+		$response = Unirest::get(self::$config['host'].$path."/".$id);
 		$this->fields = $response->body;
         return true;
 	}
 
-	public function create($arrayParam, $options = NULL) {
+	public function fetchAll($options = NULL) {
+		$path = TeechioModel::buildPath('get', $options);
+		$response = Unirest::get(self::$config['host'].$path);
+		return $response->body;
+	}
+
+	public function save($arrayParam, $options = NULL) {
 		$path = TeechioModel::buildPath('post', $options);
 		$response = Unirest::post(self::$config['host'].self::$endpoint, array( "Content-Type" => "application/json"), json_encode($arrayParam));
-		$response->code; // HTTP Status code
-		$response->headers; // Headers
 		$this->fields = $response->body;
         return true;
 	}
 
 	public function update($id, $arrayParam, $options = NULL) {
 		$path = TeechioModel::buildPath('update', $options);
-		$response = Unirest::put(self::$config['host'].$this->path, array( "Content-Type" => "application/json"), json_encode($arrayParam));
-		$response->code; // HTTP Status code
-		$response->headers; // Headers
+		$response = Unirest::put(self::$config['host'].$path."/".$id, array( "Content-Type" => "application/json"), json_encode($arrayParam));
 		$this->fields = $response->body;
         return true;
 	}
 
 	public function delete($id, $options = NULL) {
 		$path = TeechioModel::buildPath('delete', $options);
-		$response = Unirest::delete(self::$config['host'].self::$endpoint."/".$id);
-		$response->code; // HTTP Status code
-		$response->headers; // Headers
+		$response = Unirest::delete(self::$config['host'].$path."/".$id);
 		$this->fields = $response->body;
         return true;
 	}
 
 	public function upload($name, $path){
 		$response = Unirest::post(self::$config['host']."files/".$name, array( "Content-Type" => "application/octet-stream" ), Unirest::file($path));
-		$response->code; // HTTP Status code
-		$response->headers; // Headers
 		$this->fields = $response->body;
         return true;
 	}
@@ -68,11 +64,7 @@ class TeechioModel {
 			$path = self::$endpoint . '/' . $options['path'];
 		}
 		else {
-			if($method != 'post') {
-				$path = self::$endpoint."/".$id;
-			} else {
-				$path = self::$endpoint;
-			}
+			$path = self::$endpoint;
 		}
 		return $path;
 	}
