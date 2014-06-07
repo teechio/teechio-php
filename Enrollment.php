@@ -10,11 +10,11 @@ class Enrollment extends TeechioModel{
 		parent::__construct('enrollments');
 	}
 
-	public function enroll($idUser,$idModule){
+	public function enroll($idUser,$idModule) {
 		$this->update($idUser, $idModule, array('path' => $idUser . "/in/" . $idModule));
 	}
 
-	public function deleteEnroll($idUser,$idModule){
+	public function withdraw($idUser,$idModule) {
 		$this->delete($idUser,$idModule, array('path' => $idUser."/withdraw/".$idModule));
 	}
 
