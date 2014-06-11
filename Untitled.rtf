@@ -1,0 +1,69 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf190
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red127\green0\blue85;\red0\green0\blue192;\red42\green0\blue255;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww19320\viewh13980\viewkind0
+\deftab720
+\pard\pardeftab720
+
+\f0\fs22 \cf2 public\cf0  \cf2 class\cf0  Domande \cf2 extends\cf0  AsyncTask<String, Integer, String>\{\
+		String \cf3 response\cf0 ;\
+\
+		\cf2 protected\cf0  \cf2 void\cf0  onPreExecute() \{\
+\
+			\cf3 dialog\cf0  = \cf2 new\cf0  ProgressDialog(Livello.\cf2 this\cf0 );\
+			\cf3 dialog\cf0 .setTitle(\cf4 "Check access data in progress"\cf0 );\
+			\cf3 dialog\cf0 .setMessage(\cf4 "Wait a few seconds..."\cf0 );\
+			\cf3 dialog\cf0 .show();\
+\
+		\}\
+\
+		\cf2 protected\cf0  String doInBackground(String... urls)\{\
+			Query q = \cf2 new\cf0  Query();\
+			String result = q.search(\cf4 "materials"\cf0 , \cf4 "topic"\cf0 , \cf4 "city"\cf0 );\
+			System.\cf3 out\cf0 .println(\cf4 "RISULTATO"\cf0 +result);\
+			\
+			\cf2 return\cf0  result;\
+			\
+		\}\
+\
+		\cf2 protected\cf0  \cf2 void\cf0  onPostExecute(String result) \{\
+			Map<String, String> rispostepossibili = \cf2 new\cf0  HashMap<String, String>();\
+			DomandeQuiz[]elenco = \cf2 null\cf0  ;\
+			\cf2 int\cf0  w = 0;	 \
+			\cf2 try\cf0  \{\
+			   JSONArray json1 = \cf2 new\cf0  JSONArray(result);\
+			   elenco = \cf2 new\cf0  DomandeQuiz[json1.length()];\
+				\cf2 for\cf0 (\cf2 int\cf0  i=0;i<json1.length();i++)\{ \
+				JSONObject oneObject = json1.getJSONObject(i);\
+				String body = oneObject.getString(\cf4 "description"\cf0 );\
+				String idd = oneObject.getString(\cf4 "_id"\cf0 );			        \
+				\cf3 IdDomanda\cf0 [i] =idd;\
+				\cf3 TestoDomanda\cf0 [i] =body;\
+				String risposte = oneObject.getString(\cf4 "choices"\cf0 );		        \
+				Gson gson = \cf2 new\cf0  Gson();\
+				java.lang.reflect.Type type = \cf2 new\cf0  TypeToken<Map<String, String>>()\{\}.getType();\
+				Map<String, String> map = gson.fromJson(risposte, type);		       \
+				\ul Iterator\ulnone  it = map.entrySet().iterator();\
+				\cf2 while\cf0  (it.hasNext()) \{\
+				   \ul Map.Entry\ulnone  pairs = (\ul Map.Entry\ulnone )it.next();			 \
+				rispostepossibili.put(\cf4 ""\cf0 +pairs.getKey().toString(),  \cf4 ""\cf0 +pairs.getValue().toString());        \
+				\}			\
+				DomandeQuiz d = \cf2 new\cf0  DomandeQuiz(idd,body,map);\
+				elenco[w++]= d					\
+			\}		\
+							\
+			\} \cf2 catch\cf0  (JSONException e) \{\
+				System.\cf3 out\cf0 .println(\cf4 "errore"\cf0 );\
+			\}\
+			elenco = RandomizeArray(elenco);\
+		     ElencoDomandeQuiz el = \cf2 new\cf0  ElencoDomandeQuiz(elenco);\
+		\
+			\cf3 dialog\cf0 .dismiss();\
+			Intent in = \cf2 new\cf0  Intent(getApplicationContext(), DomandaBuona.\cf2 class\cf0 );\
+			in.putExtra(\cf4 "EelncoDomande"\cf0 , el);\
+			in.putExtra(\cf4 "Categoria"\cf0 , \cf4 "City"\cf0 );\
+			startActivity(in);\
+			finish();\
+		\}\
+	\}}
