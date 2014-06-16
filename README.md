@@ -28,7 +28,7 @@ License
 
 MIT
 
-[Android]:http://teech.io/docs/php/
+[Android]:http://developer.teech.io/?php
 [RestApi]:http://teech.io/docs/rest-api/
 [Twitter]:https://twitter.com/teech_io
 [Website]:http://www.teech.io
