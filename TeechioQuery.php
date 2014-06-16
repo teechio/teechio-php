@@ -3,9 +3,6 @@ require_once 'TeechioModel.php';
 
 class TeechioQuery extends TeechioModel{
 
-	private $fields;
-	private $endPoint;
-
 	public function __construct() {
 		parent::__construct('modules');
 	}
