@@ -34,7 +34,6 @@ class TeechioModel {
 	public function fetchAll($options = NULL) {
 		$path = TeechioModel::buildPath('get', $options);
 		$response = Unirest::get(self::$config['host'].$path);
-		return $response->body;
 		if($response->code == 200) {
             return $response->body;
         }
