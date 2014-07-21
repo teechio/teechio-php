@@ -105,6 +105,7 @@ class TeechioModel {
 		return $path;
 	}
 
+<<<<<<< HEAD
 	public function query($path, $endpoint) {
 		$response = Unirest::get(self::$config['host'].self::$endpoint.$path);
 		if($response->code == 200) {
@@ -117,3 +118,6 @@ class TeechioModel {
 
 
 }
+=======
+}
+>>>>>>> 140ed1e35fabcc32a4a5a2077238de6e7a5cfb1f
