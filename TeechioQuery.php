@@ -3,21 +3,37 @@ require_once 'TeechioModel.php';
 
 class TeechioQuery extends TeechioModel{
 
-	public function __construct() {
-		parent::__construct('modules');
+	private $path="?";
+	private $endpoint;
+
+	public function __construct($endpoint) {
+		parent::__construct($endpoint);
 	}
 
-	public function query($endpoint, $array) {
-		$this->get($endpoint, "", array('path' => json_encode($array)));
-		if($response->code == 200) {
-            return $response->body;
-        }
-        else {
-            $lastError = array('status' => $response->code, 'error' => $response->body);
-            return false;
-        }
+	public function search($constraints){
+		$this->path .= "query=".json_encode($constraints)."&";
+		return $this;
 	}
 
+	public function sort($c) {
+		$this->path .= "sort=".$s. "&";
+		return $this;
+	}
+
+	public function limit($n) {
+		$this->path .= "limit=".$n. "&";
+		return $this;
+	}
+
+	public function skip($n) {
+		$this->path .= "skip=".$n."&";
+		return $this;
+	}
+
+	public function get() {
+		$this->path = substr($this->path,0,-1);
+		return parent::query($this->path, $this->endpoint);
+	}
 }
 
 ?>
